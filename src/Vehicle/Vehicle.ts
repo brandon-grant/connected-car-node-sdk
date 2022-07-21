@@ -89,6 +89,17 @@ export class Vehicle extends Api {
   }
 
   /**
+ * Get vehicle image
+ *
+ * @returns vehicle image
+ */
+  public async image(): Promise<AxiosResponse['data']> {
+    return this.get(
+      `https://www.digitalservices.ford.com/fs/api/v2/vehicles/image/full?year=1970&vin=${this.vehicleVIN}`
+    );
+  }
+
+  /**
    * Get vehicle vin
    * @returns vin
    */
