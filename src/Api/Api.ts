@@ -7,7 +7,7 @@ import {ConnectedCarException} from '../Exceptions/ConnectedCarException';
 export class Api {
   private headers: {};
 
-  constructor(accessToken: string, region: string) {
+  constructor(accessToken: string, region: string, locale = 'en-US') {
     const regions = {
       US: '71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592',
       CA: '71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592',
@@ -15,18 +15,27 @@ export class Api {
       AU: '5C80A6BB-CF0D-4A30-BDBF-FC804B5C1A98',
     };
 
+    const countryCode = {
+      US: 'USA',
+      CA: 'CAN',
+      EU: 'EUR',
+      AU: 'AUS',
+    };
+
     this.headers = {
       'auth-token': accessToken,
       Accept: '*/*',
       'Accept-Language': 'en-US',
-      'User-Agent': 'FordPass/5 CFNetwork/1333.0.4 Darwin/21.5.0',
+      'User-Agent': 'FordPass/24 CFNetwork/1399 Darwin/22.1.0',
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate, br',
       'Application-Id': regions[region],
+      locale,
+      countryCode: countryCode[region],
     };
   }
 
-  public async get(url: string): Promise<AxiosResponse['data']> {
+  protected async get(url: string): Promise<AxiosResponse['data']> {
     return await axios
       .get(url, {headers: this.headers})
       .then(res => res.data)
@@ -39,7 +48,7 @@ export class Api {
       });
   }
 
-  public async post(url: string, data: {}): Promise<AxiosResponse['data']> {
+  protected async post(url: string, data: {}): Promise<AxiosResponse['data']> {
     return await axios
       .post(url, data, {headers: this.headers})
       .then(res => res.data)
@@ -52,7 +61,7 @@ export class Api {
       });
   }
 
-  public async put(url: string, data?: {}): Promise<AxiosResponse['data']> {
+  protected async put(url: string, data?: {}): Promise<AxiosResponse['data']> {
     return await axios
       .put(url, data, {headers: this.headers})
       .then(res => res.data)
@@ -65,7 +74,7 @@ export class Api {
       });
   }
 
-  public async delete(url: string): Promise<AxiosResponse['data']> {
+  protected async delete(url: string): Promise<AxiosResponse['data']> {
     return await axios
       .delete(url, {headers: this.headers})
       .then(res => res.data)

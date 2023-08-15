@@ -23,9 +23,11 @@ export class User extends Api {
    * @returns
    */
   public async vehicles(): Promise<AxiosResponse['data']> {
-    return this.get(
-      `https://services.cx.ford.com/api/dashboard/v1/users/vehicles?country=USA&language=EN&region=US&skipRecall=true`
-    );
+    const vehicleData = await this.post(`https://api.mps.ford.com/api/expdashboard/v1/details`, {
+      dashboardRefreshRequest: 'All',
+      smsWakeUpVIN: '',
+    });
+    return vehicleData['userVehicles']['vehicleDetails'];
   }
 
   /**
